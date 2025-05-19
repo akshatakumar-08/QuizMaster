@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #05161a;
+            color: #fff;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background: #072e33;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f969c;
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: #0f969c;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #0b5a5e;
+            text-decoration: underline;
+        }
+
+        .form-control {
+            background: #0f2a30;
+            color: #fff;
+            border: 1px solid #0b5a5e;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .form-control:focus {
+            background: #0f2a30;
+            color: #fff;
+            border-color: #0f969c;
+            outline: none;
+            box-shadow: 0 0 5px #0f969c;
+        }
+
+        .navbar-text {
+            color: #ccc;
+            margin-left: 10px;
+        }
+
+        /* Container styling */
+        .container {
+            margin-top: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+            padding: 20px;
+            background: #072e33;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        /* Table styling */
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            background: #0f2a30;
+            border-collapse: collapse;
+            color: #fff;
+        }
+
+        .table th, .table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background: #5782b0;
+            color: white;
+        }
+
+        .table tr:nth-child(even) {
+            background: #0d666b;
+        }
+
+        /* Button styling */
+        .btn-info {
+            background: #429aa8;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-info:hover {
+            background: #20636d;
+        }
+
+        .btn-success {
+            background: #12ac98;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background: #105845;
+        }
+
+        a.btn-info, a.btn-success {
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px 3px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar-nav {
+                margin-top: 10px;
+            }
+
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            .table th, .table td {
+                font-size: 0.9rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">Quiz Master</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="{{ url_for('user_dashboard') }}">Home</a>
+            <a class="nav-link" href="{{ url_for('user_scores') }}">Scores</a>
+            <a class="nav-link" href="{{ url_for('user_summary') }}">Summary</a>
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            <input type="text" class="form-control mx-2" placeholder="Search">
+            <span class="navbar-text">Welcome User</span>
+        </div>
+    </nav>
+
+    <!-- User Dashboard Content -->
+    <div class="container">
+        <h2>Upcoming Quizzes</h2>
+
+        <!-- Quiz Table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>No. of Questions</th>
+                    <th>Date</th>
+                    <th>Duration (hh:mm)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.id }}</td>
+                    <td>{{ quiz.questions|length }}</td>
+                    <td>{{ quiz.quiz_date.strftime('%d/%m/%Y') if quiz.quiz_date else '-' }}</td>
+                    <td>{{ quiz.duration }} min</td>
+                    <td>
+    <a href="{{ url_for('view_quiz', quiz_id=quiz.id) }}" class="btn-info">View</a>
+    {% if quiz.id not in attempted_quiz_ids %}
+        <a href="{{ url_for('take_quiz', quiz_id=quiz.id, q_no=1) }}" class="btn-success">Start</a>
+    {% else %}
+        <span style="color: #ccc;">Attempted</span>
+    {% endif %}
+</td>
+
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+            
+        </table>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div style="margin-top: 10px;">
+      {% for message in messages %}
+        <div style="background-color: #0f969c; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+
+</body>
+
+</html>

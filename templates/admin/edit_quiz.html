@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #05161a;
+            color: #ffffff;
+        }
+        .card {
+            background-color: #072e33;
+            border: none;
+            margin-bottom: 20px;
+        }
+        .form-control, .form-check-input {
+            background-color: #0f2a30;
+            border: 1px solid #0b5a5e;
+            color: #ffffff;
+        }
+        .form-control:focus, .form-check-input:focus {
+            box-shadow: 0 0 5px #0f969c;
+            border-color: #0f969c;
+        }
+        .btn-success {
+            background-color: #0f969c;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #0b5a5e;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Edit Quiz: {{ quiz.quiz_name }}</h2>
+
+    <form method="POST">
+        {% for question in quiz.questions %}
+            <div class="card p-4">
+                <h5 class="mb-3">Question {{ loop.index }}</h5>
+
+                <div class="mb-3">
+                    <label class="form-label">Question Text</label>
+                    <input type="text" name="question_text_{{ question.id }}" class="form-control" value="{{ question.question_text }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Options</label>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text">A</span>
+                                <input type="text" name="option_a_{{ question.id }}" class="form-control" value="{{ question.option_a }}" required>
+                                <div class="form-check ms-2">
+                                    <input class="form-check-input" type="radio" name="correct_option_{{ question.id }}" value="A" {% if question.correct_option == 'A' %}checked{% endif %}>
+                                    <label class="form-check-label">Correct</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text">B</span>
+                                <input type="text" name="option_b_{{ question.id }}" class="form-control" value="{{ question.option_b }}" required>
+                                <div class="form-check ms-2">
+                                    <input class="form-check-input" type="radio" name="correct_option_{{ question.id }}" value="B" {% if question.correct_option == 'B' %}checked{% endif %}>
+                                    <label class="form-check-label">Correct</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text">C</span>
+                                <input type="text" name="option_c_{{ question.id }}" class="form-control" value="{{ question.option_c }}" required>
+                                <div class="form-check ms-2">
+                                    <input class="form-check-input" type="radio" name="correct_option_{{ question.id }}" value="C" {% if question.correct_option == 'C' %}checked{% endif %}>
+                                    <label class="form-check-label">Correct</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text">D</span>
+                                <input type="text" name="option_d_{{ question.id }}" class="form-control" value="{{ question.option_d }}" required>
+                                <div class="form-check ms-2">
+                                    <input class="form-check-input" type="radio" name="correct_option_{{ question.id }}" value="D" {% if question.correct_option == 'D' %}checked{% endif %}>
+                                    <label class="form-check-label">Correct</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
+    </form>
+
+</div>
+
+</body>
+</html>

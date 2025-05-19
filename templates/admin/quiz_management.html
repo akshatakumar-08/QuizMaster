@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Management</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #05161a;
+            color: #fff;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #072e33;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f969c;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #0f969c;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            color: #0b5a5e;
+            text-decoration: underline;
+        }
+
+        nav span {
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Page Container */
+        .container {
+            margin-top: 30px;
+            max-width: 900px;
+            background: #072e33;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0f969c;
+        }
+
+        /* Table Styling */
+        .table {
+            background: #0f2a30;
+            border-radius: 8px;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        .table th {
+            background-color: #437596;
+            color: white;
+        }
+
+        .table tr {
+            background: #0f2a30; /* Default row background */
+        }
+
+        .table tr:nth-child(even) {
+            background: #0d666b; /* Alternating row background */
+        }
+
+        .table td, .table th {
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #0f969c;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5a5e;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border: none;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .btn-success {
+            background-color: #2fac95;
+            border: none;
+            display: block;
+            width: 150px;
+            margin: 20px auto 0;
+        }
+
+        .btn-success:hover {
+            background-color: #185c4b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('admin_dashboard') }}">Home</a></li>
+            <li><a href="{{ url_for('new_quiz') }}">Quiz</a></li>
+            <li><a href="{{ url_for('admin_summary') }}">Summary</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+        <span>Welcome Admin</span>
+    </nav>
+
+    <div class="container">
+        <h2>Quiz Management</h2>
+
+        <!-- Quiz List Table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Quiz Title</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.id }}</td>
+                    <td>{{ quiz.quiz_name }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}" class="btn btn-primary btn-sm">Edit</a>
+            
+                        <form id="delete-form-{{ quiz.id }}" method="POST" action="{{ url_for('delete_quiz', quiz_id=quiz.id) }}" style="display:inline;">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete('{{ quiz.id }}')">Delete</button>
+                        </form>
+                        
+            
+                        <a href="{{ url_for('add_questions', quiz_id=quiz.id) }}" class="btn btn-info btn-sm">+ Question</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            
+        </table>
+
+        <!-- Add New Quiz Button -->
+        <a href="{{ url_for('new_quiz') }}" class="btn btn-success">+ New Quiz</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    function confirmDelete(quizId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This quiz and its questions will be permanently deleted.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            background: '#072e33',
+            color: '#ffffff'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + quizId).submit();
+            }
+        });
+    }
+    </script>
+    
+
+</body>
+</html>

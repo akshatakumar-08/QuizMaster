@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #05161a;
+            color: #fff;
+        }
+
+        /* Container styling */
+        .container {
+            text-align: center;
+            background: #072e33;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* Paragraph styling */
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        /* Button group styling */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Button styling */
+        .button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #0f969c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #0b5a5e;
+        }
+
+        /* Register button styling */
+        .button.register {
+            background-color: #416184;
+        }
+
+        .button.register:hover {
+            background-color: #213141;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Quiz Master!</h1>
+        <p>Test your knowledge and challenge yourself!</p>
+        <div class="button-group">
+            <a href="{{ url_for('login') }}" class="button">Login</a>
+            <a href="{{ url_for('register') }}" class="button register">Register</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!-- Admin Dashboard -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #05161a;
+            color: #fff;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background-color: #072e33;
+            border-bottom: 2px solid #0f969c;
+        }
+
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #0f969c !important;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #0b5a5e !important;
+            text-decoration: underline;
+        }
+
+        .navbar-text {
+            color: #ccc;
+        }
+
+        /* Dashboard container styling */
+        .dashboard-container {
+            margin-top: 30px;
+            background: #072e33;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #0f969c;
+            margin-bottom: 20px;
+        }
+
+        /* Card styling */
+        .card {
+            background: #0f2a30;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        .card h4 {
+            color: #fff;
+        }
+
+        /* Table styling */
+        .table {
+            background: #0f2a30;
+            border-radius: 10px;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        .table th {
+            background-color: #437596;
+            color: white;
+        }
+
+        .table tr:nth-child(even) {
+            background: #0d666b;
+        }
+
+        .table td, .table th {
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background-color: #0f969c;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5a5e;
+        }
+
+        .btn-success {
+            background-color: #3eb790;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #13714e;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Quiz Master</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('quiz_management') }}">Quiz Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_summary') }}">Summary</a></li>
+                </ul>
+                <span class="navbar-text">Welcome Admin</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger ms-3">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="container dashboard-container mt-4">
+        <h2 class="text-center mb-4">Admin Dashboard</h2>
+
+        <!-- Subject List -->
+        <div class="card p-3 shadow">
+            <h4 class="mb-3">Subjects and Chapters</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Chapter</th>
+                        <th>Quiz Name</th>
+                        <th>Number of Questions</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                        {% for chapter in subject.chapters %}
+                            {% for quiz in chapter.quizzes %}
+                            <tr>
+                                <td>{{ subject.name }}</td>
+                                <td>{{ chapter.chapter_name }}</td>
+                                <td>{{ quiz.quiz_name }}</td>
+                                <td> 
+                                    <!-- Number of questions -->
+                                    {{ quiz.questions | length }}
+                                </td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('delete_quiz', quiz_id=quiz.id) }}" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                    
+                                    <a href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>                
+            </table>
+        </div>
+
+        <br>
+
+        <div class="text-center">
+            <a href="{{ url_for('new_quiz') }}" class="btn btn-primary">+ Add Quiz</a>
+        </div>
+
+
+        <br>
+
+        <div class="text-center">
+            <a href="{{ url_for('new_chapter') }}" class="btn btn-primary">+ Add Chapter</a>
+        </div>
+        <br>
+
+        <div class="text-center">
+            <a href="{{ url_for('subject_management') }}" class="btn btn-primary">+ Add Subject</a>
+        </div>
+
+        <br>
+
+        <!-- Manage Users Card -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Manage Users</h5>
+                <p class="card-text">View and manage all registered users.</p>
+                <a href="{{ url_for('manage_users') }}" class="btn btn-primary">View Users</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

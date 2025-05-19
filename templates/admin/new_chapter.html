@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Chapter</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #05161a;
+            color: #fff;
+        }
+
+        /* Container styling */
+        .container {
+            margin-top: 50px;
+            max-width: 600px;
+            background: #072e33;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #0f969c;
+            margin-bottom: 20px;
+        }
+
+        /* Card styling */
+        .card {
+            background: #0f2a30;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        .card .form-label {
+            color: #fff;
+        }
+
+        .card .form-control {
+            background: #0f2a30;
+            color: #fff;
+            border: 1px solid #0b5a5e;
+            border-radius: 5px;
+        }
+
+        .card .form-control:focus {
+            background: #0f2a30;
+            color: #fff;
+            border-color: #0f969c;
+            outline: none;
+            box-shadow: 0 0 5px #0f969c;
+        }
+
+        .card .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .card .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .card .btn-secondary {
+            background-color: #c06470;
+            border: none;
+        }
+
+        .card .btn-secondary:hover {
+            background-color: #9c1f1f;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Add New Chapter</h2>
+
+        <div class="card p-4 shadow">
+            <form action="{{ url_for('new_chapter') }}" method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Chapter Name:</label>
+                    <input type="text" class="form-control" name="chapter_name" placeholder="Enter chapter name" required>
+                </div>
+            
+                <div class="mb-3">
+                    <label class="form-label">Select Subject:</label>
+                    <select class="form-control" name="subject_id" required>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            
+                <div class="text-danger mb-3">* All fields are required</div>
+            
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

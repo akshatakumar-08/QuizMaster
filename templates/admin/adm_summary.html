@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Summary</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #05161a;
+            color: #fff;
+        }
+
+        .navbar {
+            background: #072e33;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f969c;
+        }
+
+        .nav-link {
+            color: #0f969c;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #0b5a5e;
+            text-decoration: underline;
+        }
+
+        .summary-container {
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            background: #072e33;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .charts-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .chart-box {
+            background: #05161a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            <a class="nav-link" href="{{ url_for('quiz_management') }}">Manage Quizzes</a>
+            <a class="nav-link" href="{{ url_for('admin_summary') }}">Summary</a>
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="summary-container">
+        <h2>Admin Summary Charts</h2>
+        <div class="charts-container">
+            <div class="chart-box">
+                <h3>Total Quizzes per Subject</h3>
+                <canvas id="subjectChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3>Quizzes Attempted Per Month</h3>
+                <canvas id="monthChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const subjectData = {
+            labels: {{ subject_labels|tojson }},
+            datasets: [{
+                label: 'Quizzes Created',
+                data: {{ subject_counts|tojson }},
+                backgroundColor: ['#5DADE2', '#28A745', '#EC7063', '#F39C12', '#BB8FCE']
+            }]
+        };
+
+        const monthData = {
+            labels: {{ month_labels|tojson }},
+            datasets: [{
+                label: 'Attempts',
+                data: {{ month_counts|tojson }},
+                backgroundColor: ['#EC7063', '#F4D03F', '#85C1E9', '#52BE80', '#BB8FCE']
+            }]
+        };
+
+        new Chart(document.getElementById('subjectChart'), {
+            type: 'bar',
+            data: subjectData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        new Chart(document.getElementById('monthChart'), {
+            type: 'pie',
+            data: monthData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+
+</body>
+</html>

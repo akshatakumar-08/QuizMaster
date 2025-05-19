@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start the Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #05161a;
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 30px;
+            padding: 30px;
+            background: #072e33;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 {
+            color: #0f969c;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .badge {
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+
+        .badge.bg-success {
+            background-color: #26c29d;
+            color: #fff;
+        }
+
+        .badge.bg-primary {
+            background-color: #3098a1;
+            color: #fff;
+        }
+
+        .question-box {
+            background: #0f2a30;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .question-box h4 {
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+        }
+
+        .form-check {
+            margin-bottom: 15px;
+        }
+
+        .form-check-label {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .form-check-input {
+            margin-right: 12px;
+            transform: scale(1.1);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #0f969c;
+            border: none;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5a5e;
+        }
+
+        .btn-success {
+            background-color: #2fac95;
+            border: none;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background-color: #1f7b67;
+        }
+
+        .button-row {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+    function startTimer(duration, display) {
+        let timer = duration, minutes, seconds;
+        const interval = setInterval(function () {
+            minutes = Math.floor(timer / 60);
+            seconds = timer % 60;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            display.textContent = minutes + ":" + seconds;
+            if (--timer < 0) {
+                clearInterval(interval);
+                display.textContent = "00:00";
+                alert("Time's up! Submitting quiz...");
+                window.location.href = "{{ url_for('submit_quiz', quiz_id=quiz.id) }}";
+            }
+        }, 1000);
+    }
+
+    window.onload = function () {
+        const timeLeft = {{ remaining_time }};
+        const display = document.querySelector("#time");
+        startTimer(timeLeft, display);
+    };
+    </script>
+
+
+</head>
+<body>
+
+    <div class="container">
+        <h2>Start the Quiz</h2>
+
+        <div class="quiz-status">
+            <div class="badge bg-success">QNo. <span>{{ q_no }}/{{ total }}</span></div>
+            <div class="badge bg-primary">Time Left: <span id="time">--:--</span></div>
+        </div>
+
+        <form method="POST" id="quizForm">
+            <div class="question-box">
+                <h4>{{ question.question_text }}</h4>
+
+                {% set options = [('A', question.option_a), ('B', question.option_b), ('C', question.option_c), ('D', question.option_d)] %}
+{% for letter, text in options %}
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="option" id="option{{ letter }}" value="{{ letter }}">
+        <label class="form-check-label" for="option{{ letter }}">{{ loop.index }}) {{ text }}</label>
+    </div>
+{% endfor %}
+
+
+            </div>
+
+            <div class="button-row">
+                {% if q_no < total %}
+                <button type="submit" class="btn btn-primary">Save and Next</button>
+                {% else %}
+                <button type="submit" class="btn btn-success">Submit</button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Quiz</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #05161a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container styling */
+        .user-container {
+            text-align: center;
+            background: #072e33;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        /* Heading styling */
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        /* Quiz details styling */
+        .quiz-details p {
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .quiz-box {
+            color: #0f969c;
+            font-weight: bold;
+        }
+
+        /* Button styling */
+        .btn-action {
+            background: #7d94ad;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-action:hover {
+            background: #2f4c6c;
+            color: white;
+        }
+
+        /* Spacing for button */
+        .mt-3 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-container">
+        <h2 class="text-center">View the Quiz</h2>
+<div class="quiz-details">
+    <p><strong>ID:</strong> <span class="quiz-box">{{ quiz.id }}</span></p>
+    <p><strong>Subject:</strong> <span class="quiz-box">{{ quiz.chapter.subject.name }}</span></p>
+    <p><strong>Chapter:</strong> <span class="quiz-box">{{ quiz.chapter.chapter_name }}</span></p>
+    <p><strong>Number of Questions:</strong> <span class="quiz-box">{{ quiz.questions|length }}</span></p>
+    <p><strong>Scheduled Date:</strong> <span class="quiz-box">{{ quiz.quiz_date.strftime('%d/%m/%Y') }}</span></p>
+    <p><strong>Duration (hh:mm):</strong> <span class="quiz-box">{{ "%02d:%02d" | format(quiz.duration, 0) }}</span></p>
+</div>
+
+        <div class="d-grid gap-2 mt-3">
+            <button class="btn-action" onclick="window.history.back()">Close</button>
+        </div>
+    </div>
+</body>
+</html>

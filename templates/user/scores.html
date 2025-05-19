@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scores</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #05161a;
+            color: #fff;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background: #072e33;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f969c;
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: #0f969c;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #0b5a5e;
+            text-decoration: underline;
+        }
+
+        .search-box {
+            background: #0f2a30;
+            color: #fff;
+            border: 1px solid #0b5a5e;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .search-box:focus {
+            background: #0f2a30;
+            color: #fff;
+            border-color: #0f969c;
+            outline: none;
+            box-shadow: 0 0 5px #0f969c;
+        }
+
+        .navbar-text {
+            color: #ccc;
+            margin-left: 10px;
+        }
+
+        /* Container styling */
+        .dashboard-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #072e33;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        /* Table styling */
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            background: #0f2a30;
+            border-collapse: collapse;
+            color: #fff;
+        }
+
+        .table th, .table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background: #4d7095;
+            color: white;
+        }
+
+        .table tr:nth-child(even) {
+            background: #0d666b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="{{ url_for('user_scores') }}">Scores</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="{{ url_for('user_dashboard') }}">Home</a>
+            <a class="nav-link" href="{{ url_for('user_scores') }}">Scores</a>
+            <a class="nav-link" href="{{ url_for('user_summary') }}">Summary</a>
+            <a class="nav-link text-danger" href="{{ url_for('logout') }}">Logout</a>
+            <input type="text" class="form-control search-box" placeholder="Search by date or score" style="width: 250px;">
+            <span class="navbar-text">Welcome, User</span>
+        </div>
+    </nav>
+
+    <!-- Scores Table -->
+    <div class="container dashboard-container">
+        <h2 class="text-center">Quiz Scores</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>No. of Questions</th>
+                    <th>Date</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+    {% for score in scores %}
+    <tr>
+        <td>{{ score.quiz.id }}</td>
+        <td>{{ score.total }}</td>
+        <td>{{ score.timestamp.strftime('%d/%m/%Y') }}</td>
+        <td>{{ score.score }}/{{ score.total }}</td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="4">No scores available.</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+        </table>
+    </div>
+
+</body>
+</html>
